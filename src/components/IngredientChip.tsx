@@ -1,6 +1,7 @@
 import { useDraggable } from '@dnd-kit/core';
 import { motion } from 'framer-motion';
 import type { Ingredient } from '../types';
+import { formatPrice } from '../lib/format';
 import type { RectLike } from './FlyingParticles';
 import './IngredientPalette.css';
 
@@ -35,7 +36,9 @@ export function IngredientChip({ ingredient, qty, onAdd }: IngredientChipProps) 
       </span>
       <span className="chip__label">
         <span className="chip__name">{ingredient.name}</span>
-        <span className="chip__unit">{isMaxed ? 'maksimum' : ingredient.unit}</span>
+        <span className="chip__unit">
+          {isMaxed ? 'maksimum' : `${ingredient.unit} · ${ingredient.price > 0 ? formatPrice(ingredient.price) : 'pulsuz'}`}
+        </span>
       </span>
       {qty > 0 && (
         <motion.span

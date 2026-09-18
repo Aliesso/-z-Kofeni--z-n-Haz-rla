@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import type { Order } from '../types';
+import { formatPrice } from '../lib/format';
 import './ConfirmationOverlay.css';
 
 interface ConfirmationOverlayProps {
@@ -94,14 +95,25 @@ export function ConfirmationOverlay({ order, onClose }: ConfirmationOverlayProps
 
             <div className="confirm-details">
               <p className="confirm-coffee-name">"{order.coffeeName}"</p>
+              <p className="confirm-size">{order.size.label} · {order.size.volumeLabel}</p>
               <ul className="confirm-list">
+                <li className="confirm-list__base">
+                  <span>Baza qiyməti</span>
+                  <span className="confirm-list__price">{formatPrice(order.size.basePrice)}</span>
+                </li>
                 {order.items.map(({ ingredient, qty }) => (
                   <li key={ingredient.id}>
-                    <span>{ingredient.icon} {ingredient.name}</span>
-                    <span className="confirm-list__qty">×{qty}</span>
+                    <span>{ingredient.icon} {ingredient.name} ×{qty}</span>
+                    <span className="confirm-list__price">
+                      {ingredient.price > 0 ? formatPrice(ingredient.price * qty) : 'pulsuz'}
+                    </span>
                   </li>
                 ))}
               </ul>
+              <div className="confirm-total">
+                <span>Cəmi</span>
+                <span>{formatPrice(order.totalPrice)}</span>
+              </div>
             </div>
 
             <p className="confirm-note">Zəhmət olmasa kassaya yaxınlaşın və sifariş nömrənizi bildirin.</p>

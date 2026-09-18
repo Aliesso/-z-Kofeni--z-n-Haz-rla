@@ -4,6 +4,8 @@ import { DndContext, DragOverlay, PointerSensor, TouchSensor, useSensor, useSens
 import { CoffeeMachine } from './components/CoffeeMachine';
 import { Cup } from './components/Cup';
 import { CoffeeNameField } from './components/CoffeeNameField';
+import { SizeSelector } from './components/SizeSelector';
+import { RecipePresets } from './components/RecipePresets';
 import { IngredientPalette } from './components/IngredientPalette';
 import { OrderSummaryBar } from './components/OrderSummaryBar';
 import { ConfirmationOverlay } from './components/ConfirmationOverlay';
@@ -11,8 +13,8 @@ import { AmbientBackground } from './components/AmbientBackground';
 import { FlyingParticles, type FlyingParticle, type RectLike } from './components/FlyingParticles';
 import { INGREDIENTS } from './data/ingredients';
 import { useCoffeeBuilder } from './hooks/useCoffeeBuilder';
-import { isSoundEnabled, playAddSound, playMaxSound, playRemoveSound, playSendSound, setSoundEnabled } from './lib/sound';
-import type { Order } from './types';
+import { isSoundEnabled, playAddSound, playMaxSound, playPresetSound, playRemoveSound, playSendSound, setSoundEnabled } from './lib/sound';
+import type { Order, RecipePreset } from './types';
 import './App.css';
 
 function makeOrderNumber() {
@@ -26,9 +28,14 @@ function App() {
     selected,
     items,
     totalItems,
+    size,
+    sizeId,
+    setSizeId,
+    totalPrice,
     addIngredient,
     decrementIngredient,
     removeIngredient,
+    applyPreset,
     reset,
   } = useCoffeeBuilder();
 
@@ -37,12 +44,25 @@ function App() {
   const [particles, setParticles] = useState<FlyingParticle[]>([]);
   const [cupBump, setCupBump] = useState(0);
   const [soundOn, setSoundOn] = useState(() => isSoundEnabled());
+  const [activePresetId, setActivePresetId] = useState<string | null>(null);
   const nextParticleId = useRef(0);
 
   const toggleSound = () => {
     const next = !soundOn;
     setSoundOn(next);
     setSoundEnabled(next);
+  };
+
+  const handleFullReset = () => {
+    reset();
+    setActivePresetId(null);
+  };
+
+  const handleApplyPreset = (preset: RecipePreset) => {
+    applyPreset(preset);
+    setActivePresetId(preset.id);
+    setCupBump((n) => n + 1);
+    playPresetSound();
   };
 
   const sensors = useSensors(
@@ -81,6 +101,7 @@ function App() {
       return;
     }
     addIngredient(id);
+    setActivePresetId(null);
     if (ingredient) {
       spawnParticle(ingredient.icon, ingredient.color, rect);
       playAddSound();
@@ -95,17 +116,20 @@ function App() {
       return;
     }
     addIngredient(id);
+    setActivePresetId(null);
     setCupBump((n) => n + 1);
     playAddSound();
   };
 
   const handlePillDecrement = (id: string) => {
     decrementIngredient(id);
+    setActivePresetId(null);
     playRemoveSound();
   };
 
   const handlePillRemove = (id: string) => {
     removeIngredient(id);
+    setActivePresetId(null);
     playRemoveSound();
   };
 
@@ -124,6 +148,7 @@ function App() {
         return;
       }
       addIngredient(id);
+      setActivePresetId(null);
       const initialRect = event.active.rect.current.initial;
       if (ingredient && initialRect) {
         spawnParticle(ingredient.icon, ingredient.color, initialRect);
@@ -137,7 +162,9 @@ function App() {
     setOrder({
       orderNumber: makeOrderNumber(),
       coffeeName: nameTrimmed,
+      size,
       items,
+      totalPrice,
       createdAt: new Date().toISOString(),
     });
     playSendSound();
@@ -145,7 +172,7 @@ function App() {
 
   const handleCloseConfirmation = () => {
     setOrder(null);
-    reset();
+    handleFullReset();
   };
 
   const activeIngredient = activeId ? INGREDIENTS.find((i) => i.id === activeId) : null;
@@ -195,25 +222,28 @@ function App() {
             transition={{ duration: 0.5, delay: 0.1, ease: 'easeOut' }}
           >
             <CoffeeMachine isBrewing={isBrewing} />
-            <Cup items={items} bumpSignal={cupBump} />
+            <Cup items={items} bumpSignal={cupBump} size={size} />
           </motion.section>
 
           <motion.section
             className="builder__panel-col"
-            initial={{ opacity: 0, x: 24 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.18, ease: 'easeOut' }}
           >
             <CoffeeNameField value={coffeeName} onChange={setCoffeeName} />
+            <SizeSelector value={sizeId} onChange={setSizeId} />
+            <RecipePresets onApply={handleApplyPreset} activePresetId={activePresetId} />
             <IngredientPalette selected={selected} onAdd={handleAddFromPalette} />
             <OrderSummaryBar
               items={items}
               totalItems={totalItems}
+              totalPrice={totalPrice}
               canSend={canSend}
               onIncrement={handlePillIncrement}
               onDecrement={handlePillDecrement}
               onRemove={handlePillRemove}
-              onReset={reset}
+              onReset={handleFullReset}
               onSend={handleSend}
             />
             {totalItems > 0 && nameTrimmed.length === 0 && (

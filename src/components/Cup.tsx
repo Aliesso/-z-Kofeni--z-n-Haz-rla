@@ -1,20 +1,21 @@
-import { useEffect } from 'react';
+import { useEffect, type CSSProperties } from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { AnimatePresence, motion, useAnimationControls } from 'framer-motion';
 import { CATEGORY_ORDER } from '../data/ingredients';
-import type { Ingredient } from '../types';
+import type { CupSizeOption, Ingredient } from '../types';
 import './Cup.css';
 
 interface CupProps {
   items: Array<{ ingredient: Ingredient; qty: number }>;
   bumpSignal: number;
+  size: CupSizeOption;
 }
 
 const LIQUID_CATEGORIES = new Set(['baza', 'sud', 'serbet']);
 const FOAM_CATEGORIES = new Set(['ustuluk']);
 const FLOAT_CATEGORIES = new Set(['elave']);
 
-export function Cup({ items, bumpSignal }: CupProps) {
+export function Cup({ items, bumpSignal, size }: CupProps) {
   const { setNodeRef, isOver } = useDroppable({ id: 'cup-drop-zone' });
   const bodyControls = useAnimationControls();
 
@@ -27,7 +28,7 @@ export function Cup({ items, bumpSignal }: CupProps) {
   const totalLiquidUnits = liquidItems.reduce((sum, i) => sum + i.qty, 0);
   const hasIce = floatItems.some((i) => i.ingredient.id === 'ice' && i.qty > 0);
   const isHot = liquidItems.some((i) => (i.ingredient.id === 'espresso' || i.ingredient.id === 'water') && i.qty > 0) && !hasIce;
-  const fillPct = totalLiquidUnits === 0 ? 0 : Math.min(94, 24 + totalLiquidUnits * 9);
+  const fillPct = totalLiquidUnits === 0 ? 0 : Math.min(94, (24 + totalLiquidUnits * 9) / size.capacityMultiplier);
   const isEmpty = items.length === 0;
   const topLiquidColor = liquidItems[liquidItems.length - 1]?.ingredient.color ?? '#e0b184';
 
@@ -42,7 +43,7 @@ export function Cup({ items, bumpSignal }: CupProps) {
   }, [bumpSignal, bodyControls]);
 
   return (
-    <div className="cup-wrap">
+    <div className="cup-wrap" style={{ '--size-scale': size.visualScale } as CSSProperties}>
       {isHot && (
         <div className="cup-steam">
           {[0, 1, 2].map((i) => (
@@ -182,6 +183,7 @@ export function Cup({ items, bumpSignal }: CupProps) {
       </motion.div>
 
       <div className="cup__saucer" />
+      <span className="cup-size-tag">{size.label} · {size.volumeLabel}</span>
     </div>
   );
 }

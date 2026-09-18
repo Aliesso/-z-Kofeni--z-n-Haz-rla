@@ -10,7 +10,9 @@
       "Bash(npx playwright *)",
       "Bash(node -e \"console.log\\(require\\('./node_modules/framer-motion/package.json'\\).version\\)\")",
       "Bash(node -e \"const m=require\\('framer-motion'\\); console.log\\(typeof m.useAnimationControls, typeof m.useAnimation\\);\")",
-      "Bash(tasklist //FI \"IMAGENAME eq chrome.exe\")"
+      "Bash(tasklist //FI \"IMAGENAME eq chrome.exe\")",
+      "Bash(NODE_PATH=\"C:\\\\Users\\\\Ali.Al\\\\Desktop\\\\ali\\\\aliessoprojects\\\\cofe-shop\\\\node_modules\" node \"C:\\\\Users\\\\Ali.Al\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Ali-Al-Desktop-ali-aliessoprojects-cofe-shop\\\\3f73b695-dd1e-4bce-872c-d0a7010e30d7\\\\scratchpad\\\\check9.js\")",
+      "Bash(NODE_PATH=\"C:\\\\Users\\\\Ali.Al\\\\Desktop\\\\ali\\\\aliessoprojects\\\\cofe-shop\\\\node_modules\" node \"C:\\\\Users\\\\Ali.Al\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Ali-Al-Desktop-ali-aliessoprojects-cofe-shop\\\\3f73b695-dd1e-4bce-872c-d0a7010e30d7\\\\scratchpad\\\\mobile.js\")"
     ]
   }
 }

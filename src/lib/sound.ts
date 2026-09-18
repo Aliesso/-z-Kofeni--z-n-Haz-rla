@@ -92,6 +92,15 @@ export function playMaxSound() {
   });
 }
 
+export function playPresetSound() {
+  play((ctx, master) => {
+    const notes = [493.88, 587.33, 739.99];
+    notes.forEach((freq, i) => {
+      scheduleTone(ctx, master, { freq, start: i * 0.05, duration: 0.16, type: 'triangle', peakGain: 0.13 });
+    });
+  });
+}
+
 export function playSendSound() {
   play((ctx, master) => {
     const notes = [523.25, 659.25, 783.99, 1046.5];

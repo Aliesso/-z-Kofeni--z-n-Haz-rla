@@ -1,10 +1,12 @@
 import { useCallback, useMemo, useState } from 'react';
 import { INGREDIENTS } from '../data/ingredients';
-import type { SelectedIngredient } from '../types';
+import { DEFAULT_SIZE_ID, SIZES } from '../data/sizes';
+import type { CupSizeId, RecipePreset, SelectedIngredient } from '../types';
 
 export function useCoffeeBuilder() {
   const [coffeeName, setCoffeeName] = useState('');
   const [selected, setSelected] = useState<SelectedIngredient[]>([]);
+  const [sizeId, setSizeId] = useState<CupSizeId>(DEFAULT_SIZE_ID);
 
   const addIngredient = useCallback((id: string) => {
     const ingredient = INGREDIENTS.find((item) => item.id === id);
@@ -32,9 +34,14 @@ export function useCoffeeBuilder() {
     setSelected((prev) => prev.filter((item) => item.id !== id));
   }, []);
 
+  const applyPreset = useCallback((preset: RecipePreset) => {
+    setSelected(preset.items.map((item) => ({ id: item.ingredientId, qty: item.qty })));
+  }, []);
+
   const reset = useCallback(() => {
     setSelected([]);
     setCoffeeName('');
+    setSizeId(DEFAULT_SIZE_ID);
   }, []);
 
   const items = useMemo(
@@ -50,15 +57,27 @@ export function useCoffeeBuilder() {
 
   const totalItems = useMemo(() => selected.reduce((sum, item) => sum + item.qty, 0), [selected]);
 
+  const size = useMemo(() => SIZES.find((s) => s.id === sizeId) ?? SIZES[0], [sizeId]);
+
+  const totalPrice = useMemo(
+    () => size.basePrice + items.reduce((sum, item) => sum + item.ingredient.price * item.qty, 0),
+    [size, items]
+  );
+
   return {
     coffeeName,
     setCoffeeName,
     selected,
     items,
     totalItems,
+    size,
+    sizeId,
+    setSizeId,
+    totalPrice,
     addIngredient,
     decrementIngredient,
     removeIngredient,
+    applyPreset,
     reset,
   };
 }

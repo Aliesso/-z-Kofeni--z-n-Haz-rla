@@ -110,10 +110,21 @@
 }
 
 .summary-bar__count {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
   font-size: 12px;
   font-weight: 700;
   color: var(--text-muted);
   margin-right: auto;
+}
+
+.summary-bar__price {
+  display: inline-block;
+  font-family: var(--heading);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent-dark);
 }
 
 .btn {

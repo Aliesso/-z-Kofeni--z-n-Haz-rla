@@ -1,10 +1,12 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import type { Ingredient } from '../types';
+import { formatPrice } from '../lib/format';
 import './OrderSummaryBar.css';
 
 interface OrderSummaryBarProps {
   items: Array<{ ingredient: Ingredient; qty: number }>;
   totalItems: number;
+  totalPrice: number;
   canSend: boolean;
   onIncrement: (id: string) => void;
   onDecrement: (id: string) => void;
@@ -16,6 +18,7 @@ interface OrderSummaryBarProps {
 export function OrderSummaryBar({
   items,
   totalItems,
+  totalPrice,
   canSend,
   onIncrement,
   onDecrement,
@@ -59,7 +62,18 @@ export function OrderSummaryBar({
       </div>
 
       <div className="summary-bar__actions">
-        <span className="summary-bar__count">{totalItems} inteqryent</span>
+        <span className="summary-bar__count">
+          {totalItems} inteqryent
+          <motion.span
+            key={totalPrice.toFixed(2)}
+            className="summary-bar__price"
+            initial={{ scale: 1.25, opacity: 0.5 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+          >
+            {formatPrice(totalPrice)}
+          </motion.span>
+        </span>
         <button type="button" className="btn btn--ghost" onClick={onReset} disabled={items.length === 0}>
           Sıfırla
         </button>
