@@ -1,0 +1,45 @@
+.ambient {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.ambient__orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.55;
+}
+
+.ambient__orb--one {
+  width: 420px;
+  height: 420px;
+  top: -140px;
+  left: -100px;
+  background: radial-gradient(circle, rgba(224, 177, 132, 0.55), transparent 70%);
+}
+
+.ambient__orb--two {
+  width: 480px;
+  height: 480px;
+  bottom: -200px;
+  right: -140px;
+  background: radial-gradient(circle, rgba(215, 107, 60, 0.35), transparent 70%);
+}
+
+.ambient__orb--three {
+  width: 320px;
+  height: 320px;
+  top: 40%;
+  left: 60%;
+  background: radial-gradient(circle, rgba(192, 133, 82, 0.3), transparent 70%);
+}
+
+.ambient__bean {
+  position: absolute;
+  bottom: 0;
+  filter: blur(0.3px) drop-shadow(0 2px 3px rgba(60, 42, 33, 0.15));
+  opacity: 0.4;
+}

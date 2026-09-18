@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:5173/)",
+      "Bash(chromium-cli --help)",
+      "Bash(Read \"C:\\\\Users\\\\Ali.Al\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-Ali-Al-Desktop-ali-aliessoprojects-cofe-shop\\\\3f73b695-dd1e-4bce-872c-d0a7010e30d7\\\\tasks\\\\b90f3qwh4.output\")",
+      "Bash(npx --yes playwright --version)",
+      "Bash(npx playwright *)",
+      "Bash(node -e \"console.log\\(require\\('./node_modules/framer-motion/package.json'\\).version\\)\")",
+      "Bash(node -e \"const m=require\\('framer-motion'\\); console.log\\(typeof m.useAnimationControls, typeof m.useAnimation\\);\")",
+      "Bash(tasklist //FI \"IMAGENAME eq chrome.exe\")"
+    ]
+  }
+}

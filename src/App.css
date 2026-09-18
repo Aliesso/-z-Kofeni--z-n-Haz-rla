@@ -1,0 +1,126 @@
+.app {
+  position: relative;
+  z-index: 1;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 24px 48px;
+}
+
+.app-header {
+  margin-bottom: 28px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.app-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.sound-toggle {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.sound-toggle:hover {
+  border-color: var(--caramel-light);
+  box-shadow: var(--shadow-md);
+}
+
+.app-header__mark {
+  font-size: 34px;
+  width: 58px;
+  height: 58px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(155deg, var(--caramel-light), var(--caramel));
+  border-radius: 18px;
+  box-shadow: var(--shadow-md);
+}
+
+.app-header__brand h1 {
+  font-size: 26px;
+  margin-bottom: 2px;
+}
+
+.app-header__brand p {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.builder {
+  display: grid;
+  grid-template-columns: minmax(260px, 360px) 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.builder__machine-col {
+  position: sticky;
+  top: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 32px 20px 24px;
+  box-shadow: var(--shadow-md);
+}
+
+.builder__panel-col {
+  min-width: 0;
+}
+
+.builder__hint {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--accent-dark);
+  text-align: right;
+}
+
+.drag-preview {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: var(--shadow-lg);
+  cursor: grabbing;
+}
+
+@media (max-width: 860px) {
+  .builder {
+    grid-template-columns: 1fr;
+  }
+
+  .builder__machine-col {
+    position: static;
+    padding: 26px 16px 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app {
+    padding: 18px 14px 36px;
+  }
+
+  .app-header__brand h1 {
+    font-size: 21px;
+  }
+}
